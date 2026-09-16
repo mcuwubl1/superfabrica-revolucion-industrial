@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superfábrica: Revolución Industrial</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:Poppins,Arial,sans-serif; color:#fff;
+  min-height:100vh; overflow-x:hidden;
+  background:linear-gradient(135deg,#141126,#26144d 45%,#0c4250);
+}
+body:before{
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.12;
+  background-image:radial-gradient(#fff 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.hidden{display:none!important}
+.screen{min-height:100vh; padding:28px 18px; display:flex; align-items:center; justify-content:center}
+.card{
+  width:min(1000px,96vw); border:2px solid rgba(255,255,255,.16);
+  background:rgba(20,15,42,.9); border-radius:28px; padding:30px;
+  box-shadow:0 20px 70px rgba(0,0,0,.4); backdrop-filter:blur(8px);
+}
+h1,h2{font-family:Anton,sans-serif; letter-spacing:1px; margin:0 0 12px}
+h1{font-size:clamp(42px,8vw,78px); line-height:.95}
+h2{font-size:clamp(30px,5vw,48px)}
+.subtitle{font-size:18px; color:#d9d5ee}
+.neon{color:#ffdf4d;text-shadow:0 0 18px rgba(255,223,77,.45)}
+.factory{
+  margin:22px 0; padding:22px; border-radius:22px;
+  background:linear-gradient(90deg,#47215c,#173e59);
+  border:2px solid #ff4fb8; position:relative; overflow:hidden;
+}
+.factory .emoji{font-size:65px; animation:bob 2s infinite ease-in-out}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.smoke{position:absolute; right:7%; top:12px; font-size:38px; opacity:.45; animation:smoke 5s infinite}
+@keyframes smoke{50%{transform:translate(20px,-20px) scale(1.2);opacity:.15}}
+button{
+  border:0; border-radius:15px; padding:14px 22px; font-size:16px;
+  font-weight:800; cursor:pointer; color:#171329;
+  background:linear-gradient(135deg,#ffdf4d,#ff9f43);
+  box-shadow:0 7px 0 #b85c24; transition:.15s; margin:6px;
+}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+button:active{transform:translateY(4px);box-shadow:0 3px 0 #b85c24}
+.btn-pink{background:linear-gradient(135deg,#ff67c8,#9c6cff);color:#fff;box-shadow:0 7px 0 #542a9a}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.rule{padding:16px;border-radius:18px;background:rgba(255,255,255,.08);text-align:center}
+.rule b{display:block;margin-top:5px}
+.topbar{width:min(1100px,96vw);margin:0 auto 15px;display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;align-items:center}
+.stat{background:rgba(20,15,42,.88);padding:12px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.14);font-weight:800}
+.stat.center{text-align:center;color:#ffdf4d}
+.progress{height:11px;background:#29213e;border-radius:99px;overflow:hidden;margin-top:7px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00f5d4,#ffdf4d,#ff4fb8);transition:.3s}
+.game{width:min(1100px,96vw)}
+.level{color:#00f5d4;font-weight:800;letter-spacing:2px}
+.question{
+  font-size:clamp(21px,3vw,30px);font-weight:800;line-height:1.25;
+  margin:16px 0 22px;
+}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.answer{
+  text-align:left;margin:0;background:rgba(255,255,255,.08);color:#fff;
+  border:2px solid rgba(255,255,255,.13);box-shadow:none;min-height:75px;
+}
+.answer:hover{background:rgba(255,255,255,.15);border-color:#ffdf4d}
+.answer.correct{background:rgba(0,245,212,.18);border-color:#00f5d4}
+.answer.wrong{background:rgba(255,70,110,.2);border-color:#ff466e}
+.answer:disabled{cursor:default;transform:none}
+.feedback{margin-top:18px;padding:17px;border-radius:17px;background:rgba(255,255,255,.08);border-left:5px solid #ffdf4d}
+.next{text-align:right;margin-top:10px}
+.scene{
+  padding:20px;border-radius:20px;background:linear-gradient(135deg,#342052,#17384b);
+  margin-bottom:18px;border:1px solid rgba(255,255,255,.12)
+}
+.scene-art{font-size:58px;display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.timerbar{height:10px;border-radius:20px;background:#352844;margin:8px 0 15px;overflow:hidden}
+.timerbar i{display:block;height:100%;background:#ff466e;width:100%;transition:linear}
+.badge{display:inline-block;padding:7px 12px;border-radius:999px;background:#ff4fb8;margin:3px;font-size:13px}
+.final-score{font-family:Anton;font-size:90px;color:#ffdf4d;text-align:center}
+.result{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.result div{background:rgba(255,255,255,.08);padding:16px;border-radius:18px;text-align:center}
+.result strong{font-size:25px;display:block}
+.tip{color:#bfeee9}
+@media(max-width:700px){
+ .rules,.result{grid-template-columns:1fr}
+ .topbar{grid-template-columns:1fr 1fr}
+ .topbar .center{grid-column:1/-1;grid-row:1}
+ .answers{grid-template-columns:1fr}
+ .card{padding:22px}
+}
+</style>
+</head>
+<body>
+
+<section id="start" class="screen">
+ <div class="card">
+   <div class="badge">🎓 3.º SEMESTRE DE PREPARATORIA</div>
+   <h1>SUPERFÁBRICA:<br><span class="neon">REVOLUCIÓN INDUSTRIAL</span></h1>
+   <p class="subtitle">¿Podrás sobrevivir a una fábrica del siglo XIX y convertirte en inspector/a de seguridad?</p>
+   <div class="factory">
+     <div class="smoke">☁️ ☁️ ☁️</div>
+     <div class="emoji">🏭 ⚙️ 👷 🧯</div>
+     <p><b>Tu misión:</b> detectar peligros, tomar decisiones y aprender por qué la higiene y la seguridad laboral se volvieron temas tan importantes.</p>
+   </div>
+   <div class="rules">
+     <div class="rule">❤️ <b>3 vidas</b>Cuida tus decisiones.</div>
+     <div class="rule">⭐ <b>Hasta 1,000+ puntos</b>Haz combos.</div>
+     <div class="rule">⏱️ <b>15 segundos</b>¡No te duermas!</div>
+   </div>
+   <button onclick="startGame()">🚀 ENTRAR A LA FÁBRICA</button>
+   <button class="btn-pink" onclick="showHow()">📚 ¿CÓMO SE JUEGA?</button>
+   <p class="tip">Consejo: lee la explicación después de cada respuesta; también es parte del juego.</p>
+ </div>
+</section>
+
+<section id="how" class="screen hidden">
+ <div class="card">
+   <h2>📚 Manual del inspector</h2>
+   <p>Recorrerás <b>5 niveles</b>. En cada uno tendrás que responder situaciones relacionadas con la higiene, los riesgos y la seguridad durante la Revolución Industrial.</p>
+   <div class="rules">
+    <div class="rule">👀<b>Nivel 1</b>Detecta el peligro</div>
+    <div class="rule">🧼<b>Nivel 2</b>Higiene laboral</div>
+    <div class="rule">⚙️<b>Nivel 3</b>Maquinaria</div>
+    <div class="rule">🚨<b>Nivel 4</b>Emergencias</div>
+    <div class="rule">🏆<b>Nivel 5</b>Reto final</div>
+   </div>
+   <p>✅ Correcta: <b>+100</b> &nbsp; ❌ Incorrecta: <b>-50</b> &nbsp; 🔥 Combo: <b>+50</b></p>
+   <button onclick="backStart()">⬅️ VOLVER</button>
+ </div>
+</section>
+
+<section id="gameScreen" class="screen hidden">
+ <div class="game">
+  <div class="topbar">
+    <div class="stat">❤️ <span id="lives">3</span> &nbsp; ⭐ <span id="score">0</span></div>
+    <div class="stat center"><span id="levelName">NIVEL 1</span><div class="progress"><i id="progress"></i></div></div>
+    <div class="stat">🔥 Combo: <span id="combo">0</span></div>
+  </div>
+  <div class="card">
+    <div class="scene">
+      <div class="scene-art" id="art">🏭 ⚙️ 👷</div>
+      <div class="timerbar"><i id="timer"></i></div>
+      <small>⏱️ Tiempo restante: <b id="seconds">15</b> s</small>
+    </div>
+    <div class="level" id="levelTitle">NIVEL 1 — DETECTA EL PELIGRO</div>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div id="feedback" class="feedback hidden"></div>
+    <div class="next"><button id="nextBtn" class="hidden" onclick="nextQuestion()">CONTINUAR ➜</button></div>
+  </div>
+ </div>
+</section>
+
+<section id="final" class="screen hidden">
+ <div class="card">
+   <div class="badge">🏆 MISIÓN TERMINADA</div>
+   <h2 style="text-align:center">Resultado del inspector</h2>
+   <div class="final-score" id="finalScore">0</div>
+   <p id="finalMessage" style="text-align:center;font-size:21px"></p>
+   <div class="result">
+     <div>🎯<strong id="correctCount">0</strong>Correctas</div>
+     <div>❌<strong id="wrongCount">0</strong>Incorrectas</div>
+     <div>🔥<strong id="bestCombo">0</strong>Mejor combo</div>
+   </div>
+   <div class="factory">
+     <h3>🧠 LO QUE APRENDISTE</h3>
+     <p>La Revolución Industrial transformó la producción mediante fábricas y maquinaria, pero también estuvo acompañada por problemas como largas jornadas, accidentes, exposición a humo y sustancias, ruido, mala ventilación y condiciones deficientes de higiene. La historia de la seguridad laboral muestra la importancia de prevenir riesgos y proteger la salud de quienes trabajan.</p>
+   </div>
+   <button onclick="startGame()">🔄 JUGAR DE NUEVO</button>
+   <button class="btn-pink" onclick="backStart()">🏠 MENÚ PRINCIPAL</button>
+ </div>
+</section>
+
+<script>
+const questions=[
+ {level:1,title:"NIVEL 1 — DETECTA EL PELIGRO",art:"🏭 ⚙️ 👷‍♀️ 🔥",q:"En una fábrica observas una máquina con engranajes expuestos y un trabajador muy cerca. ¿Qué representa principalmente?",a:["Un riesgo de atrapamiento o lesión","Una forma de aumentar la producción","Una medida de higiene","Un descanso laboral"],c:0,e:"Los engranajes y otras partes móviles podían causar lesiones graves. La prevención requiere identificar el peligro y mantener a las personas alejadas de las partes móviles."},
+ {level:1,title:"NIVEL 1 — DETECTA EL PELIGRO",art:"🏭 💨 👷 😷",q:"Hay mucho humo dentro de un taller y casi no entra aire. ¿Qué problema puede producir?",a:["Mejorar la concentración","Favorecer problemas respiratorios","Hacer funcionar mejor las máquinas","Evitar accidentes automáticamente"],c:1,e:"La mala ventilación y la exposición al humo podían afectar la salud. La ventilación es una medida básica para disminuir contaminantes en el ambiente de trabajo."},
+ {level:1,title:"NIVEL 1 — DETECTA EL PELIGRO",art:"👷 🔊 ⚙️ 😵",q:"Una persona trabaja durante horas junto a máquinas extremadamente ruidosas. ¿Qué riesgo debe considerarse?",a:["Pérdida o daño auditivo","Mejor visión","Mayor hidratación","Ningún riesgo"],c:0,e:"El ruido intenso y prolongado puede afectar la audición. Reconocer el riesgo es el primer paso para prevenirlo."},
+
+ {level:2,title:"NIVEL 2 — HIGIENE LABORAL",art:"🧼 🚰 🏭 👷",q:"Si una fábrica quiere mejorar la higiene de sus trabajadores, ¿qué medida es más adecuada?",a:["Eliminar el acceso al agua","Proporcionar agua limpia y lugares adecuados para asearse","Cerrar todas las ventanas","Aumentar el humo de las máquinas"],c:1,e:"El acceso a agua limpia y condiciones adecuadas de aseo ayuda a reducir problemas de higiene y enfermedades."},
+ {level:2,title:"NIVEL 2 — HIGIENE LABORAL",art:"🥪 🧼 👷‍♀️",q:"Antes de comer, un trabajador tiene las manos cubiertas de grasa y polvo. ¿Qué debería hacer?",a:["Comer inmediatamente","Limpiarse las manos antes de comer","Compartir la grasa con otro trabajador","Ignorar la suciedad"],c:1,e:"La higiene de manos es una práctica preventiva sencilla. El trabajo industrial podía implicar contacto con polvo, aceites y otras sustancias."},
+ {level:2,title:"NIVEL 2 — HIGIENE LABORAL",art:"💧 ☀️ 👷",q:"Durante una jornada larga y calurosa, ¿qué medida ayuda a prevenir problemas relacionados con la deshidratación?",a:["Evitar beber agua","Tener acceso a agua potable y pausas adecuadas","Trabajar más rápido","Cerrar la ventilación"],c:1,e:"La hidratación y los descansos son medidas importantes frente al calor y al esfuerzo físico."},
+
+ {level:3,title:"NIVEL 3 — MAQUINARIA",art:"⚙️🛠️ 👷 🚫",q:"Un compañero quiere retirar una protección de una máquina para trabajar más rápido. ¿Qué decisión es más segura?",a:["Retirarla sin avisar","Mantener la protección y detener el equipo cuando sea necesario intervenirlo","Pedir a alguien que mire desde lejos","Correr mientras la máquina funciona"],c:1,e:"Las protecciones están destinadas a reducir el contacto con partes peligrosas. Manipular una máquina debe hacerse con procedimientos seguros y, cuando corresponda, con el equipo detenido."},
+ {level:3,title:"NIVEL 3 — MAQUINARIA",art:"🧤 ⚙️ 👷‍♂️",q:"¿Cuál de estas acciones refleja una cultura preventiva?",a:["Ignorar pequeños desperfectos","Reportar un peligro antes de que provoque un accidente","Ocultar una falla para no detener la producción","Competir para terminar primero"],c:1,e:"Reportar riesgos permite corregirlos antes de que causen daños. La prevención busca actuar antes del accidente."},
+ {level:3,title:"NIVEL 3 — MAQUINARIA",art:"👕 ⚙️ 🚨",q:"Un trabajador usa ropa muy suelta cerca de una máquina con partes móviles. ¿Cuál es el problema?",a:["Puede engancharse en la maquinaria","La ropa aumenta la ventilación","La máquina se vuelve más lenta","No existe ningún riesgo"],c:0,e:"La ropa suelta puede engancharse en partes móviles. La vestimenta de trabajo debe ser apropiada para la tarea y el riesgo."},
+
+ {level:4,title:"NIVEL 4 — EMERGENCIA",art:"🔥🚨 🧯 👷",q:"¡Se inicia un pequeño incendio! ¿Cuál debe ser la prioridad?",a:["Tomar fotografías","Avisar y seguir el procedimiento de emergencia, priorizando la seguridad de las personas","Esconder el incendio","Continuar trabajando"],c:1,e:"Ante una emergencia, la prioridad es proteger a las personas, alertar y seguir los procedimientos establecidos. El equipo de extinción solo debe utilizarse cuando sea seguro y adecuado."},
+ {level:4,title:"NIVEL 4 — EMERGENCIA",art:"🩹 👷‍♀️ 🚨",q:"Un compañero sufre una lesión en el trabajo. ¿Qué acción es más apropiada?",a:["Ignorarlo","Avisar y solicitar atención siguiendo el procedimiento de la fábrica","Moverlo sin necesidad","Seguir produciendo y ocultar el accidente"],c:1,e:"Los accidentes deben comunicarse y atenderse. Registrar incidentes también ayuda a identificar peligros y prevenir que vuelvan a ocurrir."},
+ {level:4,title:"NIVEL 4 — EMERGENCIA",art:"🚪🏭 👷‍♂️➡️",q:"Durante una evacuación, ¿qué conducta es la más segura?",a:["Correr empujando a otros","Seguir las rutas y señales de evacuación con calma","Regresar por objetos personales","Bloquear la salida"],c:1,e:"Las rutas de evacuación permiten salir de forma organizada. Mantener la calma evita nuevos accidentes y facilita la evacuación."},
+
+ {level:5,title:"NIVEL 5 — RETO FINAL",art:"🏭 🔎 👷 🏆",q:"Como inspector, encuentras una zona con poca ventilación, suelo sucio y una máquina sin protección. ¿Qué deberías hacer primero?",a:["Ignorar todo porque la producción es importante","Identificar y reportar los riesgos para que se corrijan","Esperar a que ocurra un accidente","Decir que los trabajadores deben acostumbrarse"],c:1,e:"La prevención consiste en identificar peligros y actuar para reducirlos. Una inspección debe considerar tanto riesgos de maquinaria como condiciones de higiene y ambiente."},
+ {level:5,title:"NIVEL 5 — RETO FINAL",art:"📜 ⚙️ 👷‍♀️ 🧼",q:"¿Qué idea resume mejor la importancia histórica de la higiene y seguridad laboral?",a:["La seguridad solo importa en el siglo XXI","El crecimiento industrial hizo necesario prestar mayor atención a los riesgos y condiciones de trabajo","Las fábricas no tenían ningún riesgo","La producción debía importar más que la vida humana"],c:1,e:"La industrialización trajo grandes cambios económicos y tecnológicos, pero también hizo visibles numerosos riesgos laborales. Con el tiempo se desarrollaron normas, medidas preventivas y una mayor protección de los trabajadores."}
+];
+
+let idx=0,score=0,lives=3,combo=0,bestCombo=0,correct=0,wrong=0,timer=null,timeLeft=15,answered=false;
+
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden")}
+function showHow(){show("how")}
+function backStart(){show("start")}
+function startGame(){
+ idx=0;score=0;lives=3;combo=0;bestCombo=0;correct=0;wrong=0;
+ show("gameScreen"); renderQuestion();
+}
+function renderQuestion(){
+ if(lives<=0 || idx>=questions.length){finish();return}
+ const x=questions[idx]; answered=false;
+ document.getElementById("levelName").textContent="NIVEL "+x.level;
+ document.getElementById("levelTitle").textContent=x.title;
+ document.getElementById("art").textContent=x.art;
+ document.getElementById("question").textContent=x.q;
+ document.getElementById("score").textContent=score;
+ document.getElementById("lives").textContent=lives;
+ document.getElementById("combo").textContent=combo;
+ document.getElementById("progress").style.width=((idx)/questions.length*100)+"%";
+ const box=document.getElementById("answers");box.innerHTML="";
+ x.a.forEach((ans,i)=>{
+   const b=document.createElement("button"); b.className="answer"; b.textContent=String.fromCharCode(65+i)+") "+ans;
+   b.onclick=()=>answer(i,b); box.appendChild(b);
+ });
+ document.getElementById("feedback").classList.add("hidden");
+ document.getElementById("nextBtn").classList.add("hidden");
+ startTimer();
+}
+function startTimer(){
+ clearInterval(timer); timeLeft=15; updateTimer();
+ timer=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(timer);answer(-1,null)}},1000);
+}
+function updateTimer(){
+ document.getElementById("seconds").textContent=timeLeft;
+ document.getElementById("timer").style.width=(timeLeft/15*100)+"%";
+}
+function answer(choice,button){
+ if(answered)return; answered=true; clearInterval(timer);
+ const x=questions[idx], ok=choice===x.c;
+ document.querySelectorAll(".answer").forEach((b,i)=>{b.disabled=true;if(i===x.c)b.classList.add("correct");if(i===choice&&!ok)b.classList.add("wrong")});
+ if(ok){
+   correct++; combo++; bestCombo=Math.max(bestCombo,combo);
+   let pts=100+(combo>=3?50:0)+Math.max(0,timeLeft*2); score+=pts;
+   document.getElementById("feedback").innerHTML="✅ <b>¡Correcto!</b> +"+pts+" puntos<br><span>"+x.e+"</span>";
+ }else{
+   wrong++; lives--; combo=0;
+   document.getElementById("feedback").innerHTML="❌ <b>"+(choice===-1?"¡Se acabó el tiempo!":"No exactamente.")+"</b> -50 puntos<br><span>"+x.e+"</span>";
+   score=Math.max(0,score-50);
+ }
+ document.getElementById("feedback").classList.remove("hidden");
+ document.getElementById("score").textContent=score;
+ document.getElementById("lives").textContent=lives;
+ document.getElementById("combo").textContent=combo;
+ document.getElementById("nextBtn").textContent=(idx===questions.length-1||lives<=0)?"VER RESULTADO 🏆":"CONTINUAR ➜";
+ document.getElementById("nextBtn").classList.remove("hidden");
+}
+function nextQuestion(){idx++;renderQuestion()}
+function finish(){
+ clearInterval(timer); show("final");
+ document.getElementById("finalScore").textContent=score;
+ document.getElementById("correctCount").textContent=correct;
+ document.getElementById("wrongCount").textContent=wrong;
+ document.getElementById("bestCombo").textContent=bestCombo;
+ let msg="";
+ if(score>=900)msg="🏆 ¡Inspector/a de seguridad industrial! Reconoces muy bien los riesgos y las medidas preventivas.";
+ else if(score>=700)msg="🥇 ¡Excelente trabajo! Comprendes las principales situaciones de higiene y seguridad.";
+ else if(score>=500)msg="🥈 ¡Buen trabajo! Tienes una buena base, pero todavía puedes reforzar algunos conceptos.";
+ else msg="🔧 Estás en entrenamiento. Repasa las explicaciones y vuelve a intentarlo.";
+ document.getElementById("finalMessage").textContent=msg;
+}
+</script>
+</body>
+</html>
